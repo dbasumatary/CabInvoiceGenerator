@@ -24,4 +24,14 @@ public class InvoiceGenerator {
         }
         return totalFare;
     }
+
+    //UC3 - Enhanced Invoice
+    public InvoiceSummary calculateInvoiceSummary(RideDetail[] rideDetail) {
+        double totalFare = 0.0;
+        for (RideDetail ride : rideDetail) {
+            totalFare += calculateFare(ride.getDistance(), ride.getTime());
+        }
+        return new InvoiceSummary(rideDetail.length, totalFare);
+    }
+
 }
