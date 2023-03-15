@@ -1,5 +1,7 @@
 package cabinvoicegenerator.main;
 
+import java.util.ArrayList;
+
 //Program to calculate cab invoice generator
 public class InvoiceGenerator {
     private static final double MINIMUM_COST_PER_KILOMETER = 10;
@@ -34,4 +36,17 @@ public class InvoiceGenerator {
         return new InvoiceSummary(rideDetail.length, totalFare);
     }
 
+    //UC4 - Given UserID, the invoice service gets list of rides
+    public InvoiceSummary givenUserIDReturnInvoice(ArrayList<RideDetail> rides) {
+        double totalFare = 0;
+
+        //method takes the list of rides as input and iterates through each ride in the list
+        // For each ride, it calls the calculateFare method to calculate the fare for that ride
+        // and adds it to a running total, and it returns invoice summary
+        for(RideDetail ride : rides) {
+            totalFare = totalFare + this.calculateFare(ride.getDistance(), ride.getTime());
+        }
+        return new InvoiceSummary(rides.size(), totalFare);
+    }
 }
+
