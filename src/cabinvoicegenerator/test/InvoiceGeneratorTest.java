@@ -1,9 +1,9 @@
 package cabinvoicegenerator.test;
-import cabinvoicegenerator.main.InvoiceGenerator;
-import cabinvoicegenerator.main.InvoiceSummary;
-import cabinvoicegenerator.main.RideDetail;
+import cabinvoicegenerator.main.*;
 import org.junit.Assert;
 import org.junit.Test;
+
+import java.util.ArrayList;
 
 public class InvoiceGeneratorTest {
     public static InvoiceGenerator invoiceGenerator = new InvoiceGenerator();
@@ -72,6 +72,35 @@ public class InvoiceGeneratorTest {
             Assert.assertEquals(5.0, summary.getTotalFare());
             Assert.assertEquals(1, summary.getTotalNumOfRides());
             Assert.assertEquals(5.0, summary.getAverageFarePerRide());
+        }
+    }
+
+    //UC4 - Given UserID, the invoice service gets list of rides
+    @Test
+    public void givenUserId_ShouldReturnInvoiceSummary() {
+
+        String userID = "UID1";
+        RideRepository rideRepository = new RideRepository();
+
+        ArrayList<RideDetail> rides = new ArrayList<>();
+        rides.add(new RideDetail(20.0, 60));
+        rides.add(new RideDetail(15.0, 45));
+
+        //Add RideDetail objects to RideRepository class using addRide method along with userID
+        rideRepository.addRide(userID, rides);
+        ArrayList<RideDetail> listOfRides = rideRepository.getRides(userID);
+
+        //it calls the givenUserIDReturnInvoice method of the InvoiceGenerator class,
+        // passing the user ID to retrieve the invoice summary
+        InvoiceSummary summary = invoiceGenerator.givenUserIDReturnInvoice(listOfRides);
+        InvoiceSummary expectedSummary = new InvoiceSummary(2, 30);
+        if(expectedSummary.getAverageFarePerRide() == summary.getAverageFarePerRide()
+                && expectedSummary.getTotalNumOfRides() == summary.getTotalNumOfRides()
+                && expectedSummary.getTotalFare() == summary.getTotalFare())
+        {
+            Assert.assertEquals(437.5, summary.getTotalFare());
+            Assert.assertEquals(2, summary.getTotalNumOfRides());
+            Assert.assertEquals(218.75, summary.getAverageFarePerRide());
         }
     }
 }
